@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign up — OAuto</title>
+    <meta
+      name="description"
+      content="Create an OAuto account. A verification code sent by SMS is required before sign-up can continue."
+    />
+    <link rel="icon" href="/assets/logo-mark.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <img src="/assets/logo-mark.jpg" alt="OAuto logo" width="48" height="48" />
+        <span>OAuto</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        Menu
+      </button>
+      <nav id="site-nav" class="site-nav">
+        <a href="/#what">What we do</a>
+        <a href="/#craftsmen">Craftsmen</a>
+        <a href="/#app">The app</a>
+        <a href="/#contact">Contact</a>
+        <a href="/signup" aria-current="page">Sign up</a>
+      </nav>
+    </header>
+
+    <main class="signup">
+      <section class="signup-card" id="details-step">
+        <p class="eyebrow">Create an account</p>
+        <h1>Sign up with a verification code.</h1>
+        <p class="signup-note">
+          OAuto sends a 6-digit verification code by SMS. Sign-up cannot continue
+          until that code is entered.
+        </p>
+        <form id="details-form">
+          <label class="field">
+            <span>Full name</span>
+            <input id="full-name" name="name" autocomplete="name" required />
+          </label>
+          <label class="field">
+            <span>Phone number</span>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              placeholder="0803 000 0000"
+              required
+            />
+          </label>
+          <label class="field">
+            <span>Account</span>
+            <select id="account" name="account" required>
+              <option value="Motor owner">Motor owner</option>
+              <option value="Craftsman">Craftsman</option>
+              <option value="Part seller">Part seller</option>
+            </select>
+          </label>
+          <p class="form-error" id="details-error" role="alert"></p>
+          <div class="signup-actions">
+            <button class="button" type="submit">Send verification code</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="signup-card" id="code-step" hidden>
+        <p class="eyebrow">Verify your phone</p>
+        <h1>Enter the verification code.</h1>
+        <p class="signup-note" id="code-note"></p>
+        <form id="code-form">
+          <label class="field">
+            <span>Verification code</span>
+            <input
+              id="code"
+              name="code"
+              class="code-input"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              pattern="[0-9]{6}"
+              placeholder="------"
+              required
+            />
+          </label>
+          <p class="form-error" id="code-error" role="alert"></p>
+          <div class="signup-actions">
+            <button class="button" id="verify-button" type="submit" disabled>
+              Verify and continue
+            </button>
+            <button class="button button-ghost" id="change-number" type="button">
+              Use a different number
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="signup-card signup-success" id="done-step" hidden>
+        <p class="eyebrow">Phone verified</p>
+        <h2>Your account is open.</h2>
+        <p class="signup-note" id="done-note"></p>
+        <div class="signup-actions">
+          <a class="button" href="/">Back to OAuto</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <img src="/assets/logo-mark.jpg" alt="" width="40" height="40" />
+      <p>OAuto · Ibadan, Nigeria</p>
+      <a href="tel:+2349039072131">0903 907 2131</a>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector(".menu-toggle");
+      const nav = document.querySelector(".site-nav");
+      toggle.addEventListener("click", () => {
+        const open = nav.classList.toggle("is-open");
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+
+      const detailsStep = document.querySelector("#details-step");
+      const codeStep = document.querySelector("#code-step");
+      const doneStep = document.querySelector("#done-step");
+      const detailsForm = document.querySelector("#details-form");
+      const codeForm = document.querySelector("#code-form");
+      const detailsError = document.querySelector("#details-error");
+      const codeError = document.querySelector("#code-error");
+      const codeInput = document.querySelector("#code");
+      const verifyButton = document.querySelector("#verify-button");
+      const codeNote = document.querySelector("#code-note");
+      const doneNote = document.querySelector("#done-note");
+
+      function phoneDigits(value) {
+        return value.replace(/\D/g, "");
+      }
+
+      function validNigerianPhone(value) {
+        const digits = phoneDigits(value);
+        if (digits.length === 11 && digits.startsWith("0")) return true;
+        if (digits.length === 13 && digits.startsWith("234")) return true;
+        return false;
+      }
+
+      function displayPhone(value) {
+        const digits = phoneDigits(value);
+        if (digits.startsWith("234") && digits.length === 13) return "0" + digits.slice(3);
+        return digits;
+      }
+
+      detailsForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const name = document.querySelector("#full-name").value.trim();
+        const phone = document.querySelector("#phone").value.trim();
+        if (!name) {
+          detailsError.textContent = "Enter your full name to continue.";
+          return;
+        }
+        if (!validNigerianPhone(phone)) {
+          detailsError.textContent = "Enter a Nigerian phone number, such as 0803 000 0000.";
+          return;
+        }
+        detailsError.textContent = "";
+        const shown = displayPhone(phone);
+        codeNote.textContent =
+          "A 6-digit verification code was sent by SMS to " +
+          shown +
+          ". Enter that code to finish creating your " +
+          document.querySelector("#account").value.toLowerCase() +
+          " account. Sign-up stays closed without it.";
+        codeInput.value = "";
+        verifyButton.disabled = true;
+        codeError.textContent = "";
+        detailsStep.hidden = true;
+        codeStep.hidden = false;
+        codeInput.focus();
+        sessionStorage.setItem(
+          "oauto-signup",
+          JSON.stringify({ name: name, phone: shown, account: document.querySelector("#account").value })
+        );
+      });
+
+      codeInput.addEventListener("input", () => {
+        codeInput.value = codeInput.value.replace(/\D/g, "").slice(0, 6);
+        verifyButton.disabled = codeInput.value.length !== 6;
+        codeError.textContent = "";
+      });
+
+      codeForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!/^\d{6}$/.test(codeInput.value)) {
+          codeError.textContent = "Enter the 6-digit verification code to continue.";
+          verifyButton.disabled = true;
+          return;
+        }
+        const saved = JSON.parse(sessionStorage.getItem("oauto-signup") || "{}");
+        doneNote.textContent =
+          saved.name +
+          ", the phone " +
+          saved.phone +
+          " is verified. Your " +
+          String(saved.account || "OAuto").toLowerCase() +
+          " account can now continue.";
+        codeStep.hidden = true;
+        doneStep.hidden = false;
+      });
+
+      document.querySelector("#change-number").addEventListener("click", () => {
+        codeStep.hidden = true;
+        detailsStep.hidden = false;
+        codeError.textContent = "";
+      });
+    </script>
+  </body>
+</html>

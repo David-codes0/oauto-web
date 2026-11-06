@@ -394,6 +394,95 @@ address a:hover {
   font-weight: 700;
 }
 
+.signup {
+  width: min(560px, calc(100% - 10vw));
+  margin: 0 auto;
+  padding: 48px 0 80px;
+}
+
+.signup-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.signup-card h1 {
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  margin-bottom: 12px;
+}
+
+.signup-note {
+  color: var(--muted);
+  margin-top: 0;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.field span {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: white;
+  min-height: 48px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  padding: 0 14px;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid rgba(14, 110, 190, 0.35);
+  border-color: var(--blue);
+}
+
+.code-input {
+  letter-spacing: 0.42em;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.form-error {
+  min-height: 1.4em;
+  margin: 0 0 12px;
+  color: #9b2c2c;
+  font-weight: 650;
+}
+
+.signup-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.signup-actions .button {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.signup-actions .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.signup-success h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  margin-bottom: 10px;
+}
+
 @media (max-width: 900px) {
   .menu-toggle {
     display: inline-flex;
